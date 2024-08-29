@@ -22,7 +22,7 @@ function App() {
 
 
   return (
-    <Router>
+    <Router basename="/react-input-frame-zustand-vite">
       <Routes>
         <Route path="/" element={<Assignment1 />} />
         <Route path="/assignment2" element={<Assignment2 />} />
