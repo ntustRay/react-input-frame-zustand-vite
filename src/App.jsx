@@ -1,35 +1,61 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, {useState} from 'react';
+import {BrowserRouter as Router, Route, Routes, Link} from 'react-router-dom';
+import Assignment1 from './Assignment1';
+import Assignment2 from './Assignment2';
+import Assignment3 from './Assignment3';
+
+const getCurrentAssignment = () => {
+  switch (window.location.pathname) {
+    case '/':
+      return 'Assignment 1';
+    case '/assignment2':
+      return 'Assignment 2';
+    case '/assignment3':
+      return 'Assignment 3';
+    default:
+      return 'Assignment 1';
+  }
+};
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [currentAssignment, setCurrentAssignment] = useState(getCurrentAssignment());
+
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Assignment1 />} />
+        <Route path="/assignment2" element={<Assignment2 />} />
+        <Route path="/assignment3" element={<Assignment3 />} />
+      </Routes>
+      <div className='mt-11 justify-center'>
+        <div className='m-4'>
+          {'current assignment: ' + currentAssignment}
+        </div>
+        <Link
+          className='p-2 m-1 bg-blue-900 text-white rounded-sm'
+          to="/"
+          onClick={() => setCurrentAssignment('Assignment 1')}
+        >
+          Assignment 1
+        </Link>
+        <Link
+          className='p-2 m-1 bg-blue-900 text-white rounded-sm'
+          to="/assignment2"
+          onClick={() => setCurrentAssignment('Assignment 2')}
+        >
+          Assignment 2
+        </Link>
+        <Link
+          className='p-2 m-1 bg-blue-900 text-white rounded-sm'
+          to="/Assignment3"
+          onClick={() => setCurrentAssignment('Assignment 3')}
+        >
+          Assignment 3
+        </Link>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </Router>
+  );
 }
 
-export default App
+export default App;

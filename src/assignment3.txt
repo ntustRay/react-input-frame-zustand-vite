@@ -1,0 +1,70 @@
+# Task 3: Understanding
+
+### 1. Simply describe what "function1" will do.
+
+function1 是透過 redux-saga 來處理，並使用 Axios 進行的非同步 POST 請求。它接受一個 action 作為參數，這個非同步請求會根據不同的解果給予不同的處理方式。
+
+主要流程是：
+
+1. 初始化一個 AbortController (ctrl) 來處理請求的取消。
+2. 設定axios 所需要到cofigs（方法、URL、數據以及取消信號）。
+3. 使用這些cofig 來執行 axios 的 POST 請求。
+4. 請求完成後，會根據不同的結果，通過 put 來派發一個 action，更新 Redux 的狀態
+    1. 如果成功，透過 reducer 1，更新相關狀態
+    2. 如果失敗，它會丟出錯誤，透過 reducer 2 ，更新相關狀態
+    3. 以上執行完後，最終它會檢查請求是否被取消，如果是，透過 reducer 3，更新相關狀態。
+
+### 2. Can we stop what "function1" is doing? How?
+
+可以，通過call function2 來停止，axios 0.22.0開始，可以透過AbortController 來取消非同步的請求
+
+前提是 AbortController 是使用同一個，如果call到不同的ctrl，會消錯的請求。
+
+### 3. How to optimize this snippet?
+
+1. 避免ctrl 變成全域變術，避免其他請求用到同一個 AbortController。
+2. 每次請求，儲存一個當前請求的 AbortController 到state裡，確保會是取消到當前的請求。
+
+```js
+import { call, put } from "redux-saga/effects";
+
+function* function1(action) {
+    ctrl = new AbortController();
+    yield put({ type: 'SAVE_FUNCTION1_CTRL', payload: ctrl });
+    const config = {
+        method: "POST",
+        url: "https://some-endpoint-url.com",
+        data: action.payload,
+        signal: ctrl.signal,
+    };
+
+    try {
+        const { data } = yield call(/** a axios request with config */);
+
+        yield put(/** reducer 1 */);
+    } catch (e) {
+        if (e.response) {
+            const er = e.response;
+
+            yield put(/** reducer 2 */);
+
+            return;
+        } else {
+
+          yield put(/** reducer 4 */); //for other exception
+
+        }
+    } finally {
+        if (ctrl.signal.aborted) {
+            yield put(/** reducer 3 */);
+        }
+    }
+}
+
+function function2() {
+    const ctrl = yield select((state) => state.abortController); 
+    if (ctrl) {
+        ctrl.abort();
+    }
+}
+```
