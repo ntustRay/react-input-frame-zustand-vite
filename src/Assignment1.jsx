@@ -21,7 +21,7 @@ function App() {
 
   return (
     <div className='flex items-center justify-center m-auto' >
-      <div id="frame" className='flex justify-center p-8 border border-red-600 h-[400px] rounded'
+      <div id="frame" className='flex justify-center p-8 border border-red-600 min-h-[400px] h-fit rounded'
         style={{width: frameWidth}}>
         <div id='left' className="flex w-full m-1">
           {isEditable ?
@@ -29,10 +29,10 @@ function App() {
               placeholder={'Text field'}
               value={text}
               onChange={(e) => setText(e.target.value)}
-              className="w-full h-full border-2 border-black max-h-[350px] min-h-[100px] p-2"
+              className="w-full h-full border-2 border-black max-h-fit min-h-[100px] p-2"
               ref={textAreaRef}
             /> :
-            <p className='w-full word break-all whitespace-pre-wrap'>
+            <p className='w-full word break-all whitespace-pre-wrap text-left'>
               {text}
             </p>}
         </div>
