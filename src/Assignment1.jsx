@@ -29,7 +29,7 @@ function App() {
               placeholder={'Text field'}
               value={text}
               onChange={(e) => setText(e.target.value)}
-              className="w-full h-full border-2 border-black"
+              className="w-full h-full border-2 border-black max-h-[350px] min-h-[100px] p-2"
               ref={textAreaRef}
             /> :
             <p className='w-full word break-all whitespace-pre-wrap'>
