@@ -13,7 +13,7 @@ function Assignment3() {
 
   return (
     <div className="assignment3">
-      <MarkdownPreview className='p-4 text-left' source={markdown} />
+      <MarkdownPreview data-color-mode={'dark'} className='p-4 text-left' source={markdown} />
     </div>
   );
 }
