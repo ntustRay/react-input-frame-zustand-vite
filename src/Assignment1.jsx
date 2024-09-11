@@ -5,6 +5,7 @@ function App() {
   const [isEditable, setIsEditable] = useState(false);
   const [frameWidth, setFrameWidth] = useState('400px');
   const [text, setText] = useState('Text field');
+  const [textAreaHeight, setTextAreaHeight] = useState(40);
   const textAreaRef = useRef(null);
 
   const toggleEdit = () => {
@@ -19,6 +20,11 @@ function App() {
     setFrameWidth(frameWidth === '400px' ? '800px' : '400px');
   };
 
+  const textAreaOnChange = (e) => {
+    setTextAreaHeight(e.target.scrollHeight);
+    setText(e.target.value);
+  }
+
   return (
     <div className='flex items-center justify-center m-auto' >
       <div id="frame" className='flex justify-center p-8 border border-red-600 min-h-[400px] h-fit rounded'
@@ -28,9 +34,10 @@ function App() {
             <textarea
               placeholder={'Text field'}
               value={text}
-              onChange={(e) => setText(e.target.value)}
-              className="w-full h-full border-2 border-black max-h-fit min-h-[100px] p-2"
+              onChange={(e) => textAreaOnChange(e)}
+              className="w-full border-2 border-black max-h-fit h-fit p-2"
               ref={textAreaRef}
+              style={{height: textAreaHeight + 'px'}}
             /> :
             <p className='w-full word break-all whitespace-pre-wrap text-left'>
               {text}
